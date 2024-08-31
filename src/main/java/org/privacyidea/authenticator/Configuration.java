@@ -38,12 +38,14 @@ import static org.privacyidea.authenticator.Const.CONFIG_REALM;
 import static org.privacyidea.authenticator.Const.CONFIG_SEND_PASSWORD;
 import static org.privacyidea.authenticator.Const.CONFIG_TRIGGER_CHALLENGE;
 import static org.privacyidea.authenticator.Const.CONFIG_SERVER;
+import static org.privacyidea.authenticator.Const.CONFIG_API_KEY;
 import static org.privacyidea.authenticator.Const.CONFIG_SERVICE_ACCOUNT;
 import static org.privacyidea.authenticator.Const.CONFIG_SERVICE_PASS;
 import static org.privacyidea.authenticator.Const.CONFIG_SERVICE_REALM;
 import static org.privacyidea.authenticator.Const.CONFIG_SEND_STATIC_PASS;
 import static org.privacyidea.authenticator.Const.CONFIG_STATIC_PASS;
 import static org.privacyidea.authenticator.Const.CONFIG_VERIFY_SSL;
+import static org.privacyidea.authenticator.Const.CONFIG_ENFORCE_MFA;
 import static org.privacyidea.authenticator.Const.DEFAULT_POLLING_ARRAY;
 import static org.privacyidea.authenticator.Const.DEFAULT_POLLING_INTERVAL;
 import static org.privacyidea.authenticator.Const.TRUE;
@@ -53,10 +55,12 @@ class Configuration
     private final String serverURL;
     private final String realm;
     private final boolean doSSLVerify;
+    private final boolean doEnforceMFA;
     private final boolean doTriggerChallenge;
     private final boolean doSendPassword;
     private final boolean doSendStaticPass;
     private final String staticPass;
+    private final String apiKey;
     private final String serviceAccountName;
     private final String serviceAccountPass;
     private final String serviceAccountRealm;
@@ -80,7 +84,9 @@ class Configuration
         this.serverURL = configMap.get(CONFIG_SERVER);
         this.realm = configMap.get(CONFIG_REALM) == null ? "" : configMap.get(CONFIG_REALM);
         this.doSSLVerify = configMap.get(CONFIG_VERIFY_SSL) != null && configMap.get(CONFIG_VERIFY_SSL).equals(TRUE);
+        this.doEnforceMFA = configMap.get(CONFIG_ENFORCE_MFA) != null && configMap.get(CONFIG_ENFORCE_MFA).equals(TRUE);
         this.doTriggerChallenge = configMap.get(CONFIG_TRIGGER_CHALLENGE) != null && configMap.get(CONFIG_TRIGGER_CHALLENGE).equals(TRUE);
+        this.apiKey = configMap.get(CONFIG_API_KEY) == null ? "" : configMap.get(CONFIG_API_KEY);
         this.serviceAccountName = configMap.get(CONFIG_SERVICE_ACCOUNT) == null ? "" : configMap.get(CONFIG_SERVICE_ACCOUNT);
         this.serviceAccountPass = configMap.get(CONFIG_SERVICE_PASS) == null ? "" : configMap.get(CONFIG_SERVICE_PASS);
         this.serviceAccountRealm = configMap.get(CONFIG_SERVICE_REALM) == null ? "" : configMap.get(CONFIG_SERVICE_REALM);
@@ -162,6 +168,11 @@ class Configuration
         return doSSLVerify;
     }
 
+    boolean enforceMFA()
+    {
+        return doEnforceMFA;
+    }
+
     boolean triggerChallenge()
     {
         return doTriggerChallenge;
@@ -175,6 +186,11 @@ class Configuration
     String staticPass()
     {
         return staticPass;
+    }
+
+    String apiKey()
+    {
+        return apiKey;
     }
 
     String serviceAccountName()

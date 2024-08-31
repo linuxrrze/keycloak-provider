@@ -82,6 +82,7 @@ final class Const
     static final String CONFIG_PUSH_INTERVAL = "pipushtokeninterval";
     static final String CONFIG_EXCLUDED_GROUPS = "piexcludegroups";
     static final String CONFIG_INCLUDED_GROUPS = "piincludegroups";
+    static final String CONFIG_ENFORCE_MFA = "pienforcemfa";
     static final String CONFIG_FORWARDED_HEADERS = "piforwardedheaders";
     static final String CONFIG_ENROLL_TOKEN_TYPE = "pienrolltokentype";
     static final String CONFIG_ENROLL_TOKEN = "pienrolltoken";
@@ -92,6 +93,7 @@ final class Const
     static final String CONFIG_TRIGGER_CHALLENGE = "pidotriggerchallenge";
     static final String CONFIG_SEND_STATIC_PASS = "pisendstaticpass";
     static final String CONFIG_OTP_LENGTH = "piotplength";
+    static final String CONFIG_API_KEY = "piapikey";
     static final String CONFIG_SERVICE_PASS = "piservicepass";
     static final String CONFIG_SERVICE_ACCOUNT = "piserviceaccount";
     static final String CONFIG_SERVICE_REALM = "piservicerealm";

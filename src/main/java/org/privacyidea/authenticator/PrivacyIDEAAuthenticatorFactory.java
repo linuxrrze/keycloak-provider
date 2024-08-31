@@ -93,6 +93,15 @@ public class PrivacyIDEAAuthenticatorFactory implements org.keycloak.authenticat
                 "Select the realm where your users are stored. Leave empty to use the default realm which is configured in the privacyIDEA server.");
         configProperties.add(piRealm);
 
+        ProviderConfigProperty piEnforceMFA = new ProviderConfigProperty();
+        piEnforceMFA.setType(ProviderConfigProperty.BOOLEAN_TYPE);
+        piEnforceMFA.setName(Const.CONFIG_ENFORCE_MFA);
+        piEnforceMFA.setLabel("Enforce MFA");
+        piEnforceMFA.setHelpText(
+                "Do not force MFA. In case a user has not configured MFA just skip it.");
+        piEnforceMFA.setDefaultValue("true");
+        configProperties.add(piEnforceMFA);
+
         ProviderConfigProperty piVerifySSL = new ProviderConfigProperty();
         piVerifySSL.setType(ProviderConfigProperty.BOOLEAN_TYPE);
         piVerifySSL.setName(Const.CONFIG_VERIFY_SSL);
@@ -121,6 +130,13 @@ public class PrivacyIDEAAuthenticatorFactory implements org.keycloak.authenticat
                 "Choose if you want to trigger challenge-response token using the provided service account before the second step of authentication. " +
                 "This setting is mutually exclusive with sending any password and will take precedence over both.");
         configProperties.add(piDoTriggerChallenge);
+
+        ProviderConfigProperty piAPIKey = new ProviderConfigProperty();
+        piAPIKey.setType(ProviderConfigProperty.STRING_TYPE);
+        piAPIKey.setName(Const.CONFIG_API_KEY);
+        piAPIKey.setLabel("API key");
+        piAPIKey.setHelpText("API key. Needed for trigger challenge and token enrollment.");
+        configProperties.add(piAPIKey);
 
         ProviderConfigProperty piServiceAccount = new ProviderConfigProperty();
         piServiceAccount.setType(ProviderConfigProperty.STRING_TYPE);

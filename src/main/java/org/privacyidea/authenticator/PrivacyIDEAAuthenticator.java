@@ -39,6 +39,7 @@ import org.keycloak.common.Version;
 import org.keycloak.forms.login.LoginFormsProvider;
 import org.keycloak.models.GroupModel;
 import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.KeycloakContext;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 import org.privacyidea.Challenge;
@@ -109,6 +110,7 @@ public class PrivacyIDEAAuthenticator implements org.keycloak.authentication.Aut
         final String kcRealm = context.getRealm().getName();
         final Pair currentPair = piInstanceMap.get(kcRealm);
 
+
         if (currentPair == null || incomingHash != currentPair.configuration().configHash())
         {
             final Map<String, String> configMap = context.getAuthenticatorConfig().getConfig();
@@ -122,6 +124,7 @@ public class PrivacyIDEAAuthenticator implements org.keycloak.authentication.Aut
                                                  .realm(config.realm())
                                                  .serviceAccount(config.serviceAccountName(), config.serviceAccountPass())
                                                  .serviceRealm(config.serviceAccountRealm())
+                                                 .apiKey(config.apiKey())
                                                  .build();
 
             // Close the old privacyIDEA instance to shut down the thread pool before replacing it in the map
@@ -153,6 +156,7 @@ public class PrivacyIDEAAuthenticator implements org.keycloak.authentication.Aut
     public void authenticate(AuthenticationFlowContext context)
     {
         final Pair currentPair = loadConfiguration(context);
+        String kcRealm = context.getRealm().getName();
 
         PrivacyIDEA privacyIDEA = currentPair.privacyIDEA();
         Configuration config = currentPair.configuration();
@@ -178,7 +182,16 @@ public class PrivacyIDEAAuthenticator implements org.keycloak.authentication.Aut
                 return;
             }
         }
+	else if (!config.enforceMFA())
+	{
+		List<TokenInfo> tokenInfos = privacyIDEA.getTokenInfo(currentUser);
 
+		if (tokenInfos == null || tokenInfos.isEmpty()) {
+			logger.info("MFA not enforced and no token configured (user: "+currentUser+", realm: "+kcRealm+") - skipping MFA");
+			context.success();
+			return;
+		}
+	}
         String currentPassword = null;
 
         // In some cases, there will be no FormParameters so check if it is possible to even get the password
